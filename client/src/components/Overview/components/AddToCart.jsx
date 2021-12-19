@@ -5,8 +5,12 @@ class AddToCart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cart: ''
+      cart: {}
     };
+  }
+
+  addToCart() {
+    // post request to cart here
   }
 
   render() {

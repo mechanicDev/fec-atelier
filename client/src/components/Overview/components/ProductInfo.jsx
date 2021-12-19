@@ -1,12 +1,25 @@
 import React from 'react';
-
+import axios from 'axios';
 
 class ProductInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      productInfoStuff: ''
+      reviews: ''
     };
+  }
+
+  componentDidMount() {
+    axios.post(`/reviews/meta`, {
+      data : {
+        product_id : this.props.itemid
+      }
+    })
+      .then((reviewsData) => {
+        this.setState({
+          reviews : reviewsData.data.ratings
+        })
+      })
   }
 
   render() {
