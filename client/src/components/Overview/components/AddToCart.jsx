@@ -14,15 +14,9 @@ class AddToCart extends React.Component {
       totalQuantity: null,
       myOutfit: []
     };
-    this.addToCart = this.addToCart.bind(this);
-    this.addToMyOutfit = this.addToMyOutfit.bind(this);
-    this.selectSize = this.selectSize.bind(this);
-    this.selectQuantity = this.selectQuantity.bind(this);
-    this.getSizes = this.getSizes.bind(this);
-    this.mapQuantity = this.mapQuantity.bind(this);
   }
 
-  addToCart() {
+  addToCart = () => {
     if (this.state.selectedSize === undefined) {
       alert('Please select a size');
       return;
@@ -35,26 +29,29 @@ class AddToCart extends React.Component {
     })
   }
 
-  addToMyOutfit() {
+  addToMyOutfit = () => {
     let newOutfit = this.state.myOutfit
     _.contains(this.state.myOutfit, this.state.sku) ?
       (newOutfit.splice(newOutfit.indexOf(this.state.sku), 1),
-        this.setState({
+        this.setState((state, props) => ({
           myOutfit: newOutfit
-        })
-      ) :
-      this.setState({
-        myOutfit: this.state.myOutfit.concat([this.state.sku])
-      });
+        }), () => {
+          this.props.addToOutfit(this.state.sku)
+        })) :
+      this.setState((state, props) => ({
+        myOutfit: state.myOutfit.concat([state.sku])
+      }), () => {
+        this.props.addToOutfit(this.state.sku)
+      })
   }
 
-  selectSize(e) {
+  selectSize = (e) => {
     let entries = Object.entries(this.props.styleData.skus)
     for (let i = 0; i < entries.length; i++) {
       if (entries[i][1].size === e.target.value) {
         this.setState({
-          selectedSize: e.target.value,
-          sku: entries[i][0],
+          selectedSize: Number(e.target.value),
+          sku: Number(entries[i][0]),
           totalQuantity: entries[i][1].quantity,
           selectedQuantity: 1
         })
@@ -62,7 +59,7 @@ class AddToCart extends React.Component {
     }
   }
 
-  getSizes() {
+  getSizes = () => {
     let sizes = [];
     let values = _.values(this.props.styleData.skus)
     for (let i = 0; i < values.length; i++) {
@@ -71,13 +68,13 @@ class AddToCart extends React.Component {
     return sizes;
   }
 
-  selectQuantity(e) {
+  selectQuantity = (e) => {
     this.setState({
       selectedQuantity: e.target.value
     })
   }
 
-  mapQuantity() {
+  mapQuantity = () => {
     let quantity = []
     for (let i = 1; i <= this.state.totalQuantity; i++) {
       if (i <= 15) {

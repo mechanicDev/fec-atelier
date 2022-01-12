@@ -17,7 +17,6 @@ class StyleSelector extends React.Component {
         <h4>Style {this.props.styleName}</h4>
         <div className="style-img-container">
           {_.map(this.props.styleImgs, (style, index) => {
-            // console.log('re render')
             if (index % 4 === 0) {
               return (
               <span key={index} className="style-img-background">

@@ -18,17 +18,11 @@ class Overview extends React.Component {
       photo: '',
       selectedStyle: 0,
       currentPhoto: 0,
-      numberOfPhotos: 0
+      numberOfPhotos: 0,
     };
-    this.grabProductData = this.grabProductData.bind(this);
-    this.grabStylesData = this.grabStylesData.bind(this);
-    this.handleSelectStyle = this.handleSelectStyle.bind(this);
-    this.cycleForward = this.cycleForward.bind(this);
-    this.cycleBackward = this.cycleBackward.bind(this);
-    this.changePhoto = this.changePhoto.bind(this);
   }
 
-  async grabProductData() {
+  grabProductData = async () => {
     await axios.get(`products/${this.props.itemid}`)
       .then((result) => {
         this.setState({
@@ -40,7 +34,7 @@ class Overview extends React.Component {
       });
   }
 
-  async grabStylesData() {
+  grabStylesData = async () => {
     await axios.get(`products/${this.props.itemid}/styles`)
       .then((result) => {
         this.setState({
@@ -54,46 +48,54 @@ class Overview extends React.Component {
       });
   }
 
-  cycleForward(e) {
-    let current = this.state.currentPhoto;
+  cycleForward = (e) => {
     let max = this.state.numberOfPhotos;
+    let current = this.state.currentPhoto;
     this.state.currentPhoto < max - 1 ?
     this.setState({
       photo: this.state.styleData[this.state.selectedStyle].photos[current + 1].url,
-      currentPhoto: this.state.currentPhoto + 1
+      currentPhoto: this.state.currentPhoto + 1,
+      minIndex: this.state.minIndex + 1
     }) :
     null
   }
 
-  cycleBackward(e) {
-    let current = this.state.currentPhoto;
+  cycleBackward = (e) => {
     let max = this.state.numberOfPhotos;
+    let current = this.state.currentPhoto;
     this.state.currentPhoto > 0 ?
     this.setState({
       photo: this.state.styleData[this.state.selectedStyle].photos[current - 1].url,
-      currentPhoto: this.state.currentPhoto - 1
+      currentPhoto: this.state.currentPhoto - 1,
+      minIndex: this.state.minIndex - 1
     }) :
     null
   }
 
   changePhoto = (e) => {
     e.preventDefault();
-    this.setState({
-      photo: this.state.styleData[this.state.selectedStyle].photos[e.target.id].url,
-      currentPhoto: Number(e.target.id)
-    });
+    if (this.state.currentPhoto >= this.state.styleData[this.state.selectedStyle].photos.length - 7) {
+      let subtractor = this.state.styleData[this.state.selectedStyle].photos.length - 7
+      this.setState((state, props) => ({
+        photo: state.styleData[state.selectedStyle].photos[Number(e.target.id) + subtractor].url,
+        currentPhoto: Number(e.target.id) + subtractor
+      }))
+    } else {
+      this.setState((state, props) => ({
+        photo: state.styleData[state.selectedStyle].photos[Number(e.target.id) + state.currentPhoto].url,
+        currentPhoto: Number(e.target.id) + state.currentPhoto
+      }))
+    }
   }
 
-  handleSelectStyle(e) {
+  handleSelectStyle = (e) => {
     let current = this.state.currentPhoto;
     let currentStyle = e.target.id;
     let currentPhoto = this.state.currentPhoto;
     this.setState({
       selectedStyle: currentStyle,
-      photo: this.state.styleData[currentStyle].photos[current].url,
-      numberOfPhotos: this.state.styleData[currentPhoto].photos.map(style => style.photos).length
+      photo: this.state.styleData[currentStyle].photos[current].url
     });
-
   }
 
   componentDidMount() {
@@ -103,29 +105,27 @@ class Overview extends React.Component {
 
   render() {
     return (
-      <div data-testid='overview-widget'>
-        <div>
-          <h1>Overview</h1>
+      <div data-testid='overview-widget' className="overview">
+        <ProductInfo itemid={this.props.itemid} productData={this.state.productData}
+          originalPrice={this.state.styleData[this.state.selectedStyle] !== undefined ?
+            this.state.styleData[this.state.selectedStyle].original_price : null}
+          salePrice={this.state.styleData[this.state.selectedStyle] !== undefined ?
+            this.state.styleData[this.state.selectedStyle].sale_price : null} />
 
-          <ProductInfo itemid={this.props.itemid} productData={this.state.productData}
-            originalPrice={this.state.styleData[this.state.selectedStyle] !== undefined ?
-              this.state.styleData[this.state.selectedStyle].original_price : null}
-            salePrice={this.state.styleData[this.state.selectedStyle] !== undefined ?
-              this.state.styleData[this.state.selectedStyle].sale_price : null} />
+        <ImageGallery styleData={this.state.styleData} photo={this.state.photo}
+          selectedStyle={this.state.selectedStyle}
+          forward={this.cycleForward} backward={this.cycleBackward}
+          changePhoto={this.changePhoto}
+          currentPhoto={this.state.currentPhoto}/>
 
-          <ImageGallery styleData={this.state.styleData} photo={this.state.photo}
-            selectedStyle={this.state.selectedStyle}
-            forward={this.cycleForward} backward={this.cycleBackward}
-            changePhoto={this.changePhoto}/>
+        <StyleSelector styleImgs={_.map(this.state.styleData, style => style.photos).map(arr => arr[0].thumbnail_url)}
+          selectStyle={this.handleSelectStyle}
+          styleName={this.state.styleData[this.state.selectedStyle] !== undefined ?
+          this.state.styleData[this.state.selectedStyle].name : null}
+          selectedStyle={Number(this.state.selectedStyle)}/>
 
-          <StyleSelector styleImgs={_.map(this.state.styleData, style => style.photos).map(arr => arr[0].thumbnail_url)}
-            selectStyle={this.handleSelectStyle}
-            styleName={this.state.styleData[this.state.currentPhoto] !== undefined ?
-            this.state.styleData[this.state.selectedStyle].name : null}
-            selectedStyle={Number(this.state.selectedStyle)}/>
-
-          <AddToCart productName={this.state.productData.name} styleData={this.state.styleData[this.state.selectedStyle]}/>
-        </div>
+        <AddToCart productName={this.state.productData.name} styleData={this.state.styleData[this.state.selectedStyle]}
+        addToOutfit={this.props.addToOutfit}/>
       </div>
     )
   }

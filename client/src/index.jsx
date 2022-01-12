@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import _ from 'underscore';
 
 import Overview from './components/Overview/Overview.jsx';
 import QA from './components/QA/QA.jsx';
@@ -12,7 +13,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553
+      item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553,
+      myOutfit: []
     };
     this.changeProduct = this.changeProduct.bind(this);
   }
@@ -21,13 +23,30 @@ class App extends React.Component {
     this.setState({ item_id: id });
   }
 
+  addToOutfit = (sku) => {
+    let newOutfit = this.state.myOutfit
+    _.contains(this.state.myOutfit, sku) ?
+      (newOutfit.splice(newOutfit.indexOf(sku), 1),
+        this.setState((state, props) => ({
+          myOutfit: newOutfit
+        }), () => {
+          console.log('removed from my outfit :',this.state.myOutfit)
+        })) :
+      this.setState((state, props) => ({
+        myOutfit: state.myOutfit.concat([sku])
+      }), () => {
+        console.log('added to my outfit :',this.state.myOutfit)
+      })
+  }
+
   render() {
     return (
       <div>
         <h1>Atelier</h1>
         <div className="main">
-          <div className="overview">
-            <Overview itemid={this.state.item_id} />
+          <div className="overview-widget">
+            <Overview itemid={this.state.item_id}
+            addToOutfit={this.addToOutfit}/>
           </div>
           <QA itemid={this.state.item_id} />
           <div className="ratings">

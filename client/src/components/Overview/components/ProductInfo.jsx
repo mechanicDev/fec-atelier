@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import _ from 'underscore';
+import StarRating from '../../Ratings/components/StarRating.jsx';
 import "regenerator-runtime/runtime.js";
 
 class ProductInfo extends React.Component {
@@ -84,15 +85,18 @@ class ProductInfo extends React.Component {
   }
 
   render() {
+
+    let numReviews = _.reduce(this.state.starCount, (memo, num) => {
+      return parseInt(memo) + parseInt(num);
+        }, 0)
+
     return (
       <div className="product-info" data-testid="product-info">
         <h4>Product Info</h4>
         {this.state.starCount.length ?
           <div className="star-rating" data-testid="star-rating">
-            {this.calculateStarRating()} Stars //
-            {(_.reduce(this.state.starCount, (memo, num) => {
-              return parseInt(memo) + parseInt(num);
-                }, 0))} Reviews
+            <StarRating star_rating={this.calculateStarRating()}></StarRating>
+            <a href="#reviews-link">{` Read all ${numReviews} reviews`}</a>
           </div>
           : null
         }
