@@ -1,35 +1,52 @@
 import React from 'react';
 import $ from 'jquery';
+import ReactModal from 'react-modal';
 
 class ProductCard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      mainItem: null,
       type: props.type,
       key: props.i,
-      item: props.item
+      item: props.item,
+      showModal: false,
+      items: [1,2,3]
     };
     this.handleClick = this.handleClick.bind(this);
-    this.changeProduct = props.changeProduct
+    this.changeProduct = props.changeProduct;
+    this.showModalFunc = this.showModalFunc.bind(this);
   }
 
   handleClick(e) {
     e.preventDefault();
     this.changeProduct(this.props.item.id);
+    this.setState({ showModal: !this.state.showModal })
+  }
+
+  showModalFunc() {
+    console.log('This is the show modal func')
+  }
+
+  comparisonDetails() {
+    this.state.items.map(item => (
+      <p>item</p>
+    ))
   }
 
   render() {
-    // if (!this.state.item.styles[0].photos[0].thumbnail_url) {
-    //   this.state.item.styles[0].photos[0].thumbnail_url =
-    // }
-    console.log('State Props: ', this.state)
+
     if (this.state.type === 'related') {
       return (
         <div
           className='product_card related_product'
           onClick={this.handleClick}
           item={this.state.id}>
-
+            <ReactModal
+              className={related-item-modal-window}
+              isOpen={this.state.showModal}
+              onAfterOpen={ this.showModalFunc() }>
+            </ReactModal>
           <span>
             <img
               className="related_product_image"

@@ -45,12 +45,12 @@ class App extends React.Component {
         <h1>Atelier</h1>
         <div className="main">
           <div className="overview-widget">
-            <Overview itemid={this.state.item_id}
+            {/* <Overview itemid={this.state.item_id} */}
             addToOutfit={this.addToOutfit}/>
           </div>
-          <QA itemid={this.state.item_id} />
+          {/* <QA itemid={this.state.item_id} /> */}
           <div className="ratings">
-            <Ratings itemid={this.state.item_id} />
+            {/* <Ratings itemid={this.state.item_id} /> */}
           </div>
         </div>
         <div>
