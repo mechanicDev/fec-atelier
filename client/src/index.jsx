@@ -18,7 +18,6 @@ class App extends React.Component {
   }
 
   changeProduct(id) {
-    console.log('This is still running atleast')
     this.setState({ item_id: id });
   }
 
@@ -41,7 +40,7 @@ class App extends React.Component {
             changeProduct={this.changeProduct} />
         </div>
         <div>
-          {/* <Outfits itemId={this.state.item_id} /> */}
+          <Outfits itemId={this.state.item_id} />
         </div>
       </div>
     );
