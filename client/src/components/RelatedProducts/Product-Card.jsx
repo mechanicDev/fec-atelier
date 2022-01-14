@@ -6,7 +6,6 @@ class ProductCard extends React.Component {
     super(props)
     this.state = {
       type: props.type,
-      key: props.i,
       item: props.item
     };
     this.handleClick = this.handleClick.bind(this);
