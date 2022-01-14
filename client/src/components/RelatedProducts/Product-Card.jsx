@@ -4,8 +4,8 @@ import ReactModal from 'react-modal';
 
 class ProductCard extends React.Component {
   constructor(props) {
+    super(props)
     this.state = {
-      id: props.id,
       type: props.type,
       item: props.item,
       showModal: false
@@ -22,13 +22,18 @@ class ProductCard extends React.Component {
   }
 
   showModalFunc() {
+
   }
 
-  // comparisonDetails() {
-  //   this.state.items.map(item => (
-  //     <p>item</p>
-  //   ))
-  // }
+  comparisonDetails() {
+    this.state.items.map(item => (
+      <p>item</p>
+    ))
+  }
+
+  componentDidMount() {
+    ReactModal.setAppElement('body');
+}
 
   render() {
     if (this.state.type === 'related') {
@@ -37,6 +42,13 @@ class ProductCard extends React.Component {
           className='product_card related_product'
           onClick={this.handleClick}
           id={this.state.id}>
+
+          <ReactModal
+            className='related-item-modal-window'
+            isOpen={this.state.showModal}
+            onAfterOpen={ this.showModalFunc }
+          >
+          </ReactModal>
 
           <span>
             <img
@@ -73,12 +85,3 @@ class ProductCard extends React.Component {
 };
 
 export default ProductCard;
-
-
- /* <ReactModal
-              className='related-item-modal-window'
-              isOpen={this.state.showModal}
-              // onAfterOpen={ this.showModalFunc }
-              >
-
-            </ReactModal>  */

@@ -30,7 +30,6 @@ class RelatedItems extends React.Component {
     if (!this.state.relatedItems.length) {
       return <div className="blank_Load">Testing</div>
     }
-    let i = 0;
     return (
       <div onClick={this.onclick}>
       <Carousel
@@ -39,12 +38,10 @@ class RelatedItems extends React.Component {
         transition={0.5}
         >
         {this.state.relatedItems.map(item => {
-          i++;
           console.log('This should work??', item.id)
           return (
           <ProductCard
-            // key={item.id}
-            id={item.id}
+            key={item.id}
             type={'related'}
             item={item}
             changeProduct={this.changeProduct}
