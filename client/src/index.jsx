@@ -46,7 +46,7 @@ class App extends React.Component {
         <div className="main">
           <div className="overview-widget">
             {/* <Overview itemid={this.state.item_id} */}
-            addToOutfit={this.addToOutfit}/>
+            {/* addToOutfit={this.addToOutfit}/> */}
           </div>
           {/* <QA itemid={this.state.item_id} /> */}
           <div className="ratings">
@@ -59,7 +59,7 @@ class App extends React.Component {
             changeProduct={this.changeProduct} />
         </div>
         <div>
-          <Outfits itemId={this.state.item_id} />
+          {/* <Outfits itemId={this.state.item_id} /> */}
         </div>
       </div>
     );

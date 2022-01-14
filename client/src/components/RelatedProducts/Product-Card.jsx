@@ -4,14 +4,11 @@ import ReactModal from 'react-modal';
 
 class ProductCard extends React.Component {
   constructor(props) {
-    super(props)
     this.state = {
-      mainItem: null,
+      id: props.id,
       type: props.type,
-      key: props.i,
       item: props.item,
-      showModal: false,
-      items: [1,2,3]
+      showModal: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.changeProduct = props.changeProduct;
@@ -25,28 +22,22 @@ class ProductCard extends React.Component {
   }
 
   showModalFunc() {
-    console.log('This is the show modal func')
   }
 
-  comparisonDetails() {
-    this.state.items.map(item => (
-      <p>item</p>
-    ))
-  }
+  // comparisonDetails() {
+  //   this.state.items.map(item => (
+  //     <p>item</p>
+  //   ))
+  // }
 
   render() {
-
     if (this.state.type === 'related') {
       return (
         <div
           className='product_card related_product'
           onClick={this.handleClick}
-          item={this.state.id}>
-            <ReactModal
-              className={related-item-modal-window}
-              isOpen={this.state.showModal}
-              onAfterOpen={ this.showModalFunc() }>
-            </ReactModal>
+          id={this.state.id}>
+
           <span>
             <img
               className="related_product_image"
@@ -82,3 +73,12 @@ class ProductCard extends React.Component {
 };
 
 export default ProductCard;
+
+
+ /* <ReactModal
+              className='related-item-modal-window'
+              isOpen={this.state.showModal}
+              // onAfterOpen={ this.showModalFunc }
+              >
+
+            </ReactModal>  */
