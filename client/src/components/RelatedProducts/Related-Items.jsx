@@ -1,20 +1,29 @@
 import React from 'react';
 import $ from 'jquery';
 import ProductCard from './Product-Card.jsx';
+import TableRow from './TableRow.jsx';
 import { Carousel } from '@trendyol-js/react-carousel';
 import { Item } from './Product-Card.jsx';
+import ReactModal from 'react-modal';
 
 class RelatedItems extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       currentItem: props.itemId,
-      relatedItems: []
+      relatedItems: [],
+      showModal: false,
+      currentItemFeatures: props.features,
+      combinedItemFeatures: {}
     };
     this.changeProduct = props.changeProduct;
+    this.handleClick = this.handleClick.bind(this);
+    this.closeModalOnClick = this.closeModalOnClick.bind(this);
+    this.handleStarClick = this.handleStarClick.bind(this);
   }
 
   componentDidMount() {
+    ReactModal.setAppElement('body');
     $.ajax({
       url: '/relatedItems',
       method: 'GET',
@@ -25,26 +34,89 @@ class RelatedItems extends React.Component {
     })
   }
 
+  handleClick(e) {
+    this.setState({showModal: !this.state.showModal})
+  }
+
+  closeModalOnClick() {
+    this.setState({showModal: false})
+  }
+
+  onModalOpen(e) {
+    console.log('this is the event: ', e.target)
+  }
+
+  handleStarClick(related) {
+    let combined = {};
+    let main = this.state.currentItemFeatures;
+
+    for (let i=0; i < main.length; i++) {
+      let currentFeature = main[i].feature;
+      let currentItemFeatureValue = main[i].value;
+      if(!combined.currentFeature) {
+        combined[currentFeature] = [currentItemFeatureValue, null]
+      }
+    }
+
+    for (let i = 0; i < related.length; i++) {
+      let currentFeature = related[i].feature;
+      let currentItemFeatureValue = related[i].value;
+      if(!combined.currentFeature) {
+        combined[currentFeature] = [null, currentItemFeatureValue];
+      }
+      else {
+        combined[currentFeature] = [combined[currentFeature][0], currentItemFeatureValue]
+      }
+    }
+    this.setState({combinedItemFeatures: combined})
+  }
+
+  componentWillReceiveProps({features}) {
+    this.setState({currentItemFeatures: features})
+  }
+
   render() {
-    console.log('State: ', this.state)
     if (!this.state.relatedItems.length) {
-      return <div className="blank_Load">Testing</div>
+      return <div className="blank_Load"></div>
     }
     return (
       <div onClick={this.onclick}>
+
+        <ReactModal
+          style={{
+            overlay: {
+              position: 'fixed',
+              top: '20%',
+              left: '25%',
+              right: '25%',
+              bottom: '20%',
+              backgroundColor: 'White',
+              border: '2px solid grey'
+            }
+          }}
+            className={"ReactModal__Content"}
+            bodyOpenClassName={"ReactModal__Body--open"}
+            isOpen={this.state.showModal}
+            onAfterOpen={this.onModalOpen}
+            shouldCloseOnOverlayClick={true}
+            onRequestClose={this.closeModalOnClick}
+          >
+
+          </ReactModal>
       <Carousel
         show={3.5}
         slide={3}
         transition={0.5}
         >
         {this.state.relatedItems.map(item => {
-          console.log('This should work??', item.id)
           return (
           <ProductCard
             key={item.id}
+            mainItem={this.props.itemId}
             type={'related'}
             item={item}
-            changeProduct={this.changeProduct}
+            handleCardClick = {this.handleClick}
+            handleStarClick = {this.handleStarClick}
           />)
         })}
       </Carousel>

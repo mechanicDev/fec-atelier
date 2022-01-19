@@ -1,6 +1,6 @@
 import React from 'react';
 
-let ModalCard = (item1, catergory, item2) => {
+let TableRow = (item1, catergory, item2) => {
   (<tr>
     <th>Value for item1: {item1}</th>
     <th>Has Thing?: {catergory}</th>
@@ -8,4 +8,4 @@ let ModalCard = (item1, catergory, item2) => {
   </tr>)
 }
 
-export default ModalCard
+export default TableRow

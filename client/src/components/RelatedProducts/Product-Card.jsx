@@ -1,55 +1,41 @@
 import React from 'react';
 import $ from 'jquery';
-import ReactModal from 'react-modal';
 
 class ProductCard extends React.Component {
   constructor(props) {
+    // console.log('Props at the card level: ', props)
     super(props)
     this.state = {
       type: props.type,
       item: props.item,
       showModal: false
     };
-    this.handleClick = this.handleClick.bind(this);
-    this.changeProduct = props.changeProduct;
-    this.showModalFunc = this.showModalFunc.bind(this);
+    this.handleCardClick = this.handleClick.bind(this);
+    this.handleStarClick = this.handleStarClick.bind(this);
+    this.sendItemFeatures = props.handleStarClick;
   }
 
   handleClick(e) {
     e.preventDefault();
-    this.changeProduct(this.props.item.id);
-    this.setState({ showModal: !this.state.showModal })
+    // this.changeProduct(this.props.item.id);
   }
 
-  showModalFunc() {
-
+  handleStarClick(e) {
+    e.preventDefault()
+    this.sendItemFeatures(this.state.item.features)
   }
-
-  comparisonDetails() {
-    this.state.items.map(item => (
-      <p>item</p>
-    ))
-  }
-
-  componentDidMount() {
-    ReactModal.setAppElement('body');
-}
 
   render() {
     if (this.state.type === 'related') {
       return (
         <div
           className='product_card related_product'
-          onClick={this.handleClick}
           id={this.state.id}>
-
-          <ReactModal
-            className='related-item-modal-window'
-            isOpen={this.state.showModal}
-            onAfterOpen={ this.showModalFunc }
-          >
-          </ReactModal>
-
+          <div
+            className={"actionButton"}
+            onClick={this.handleStarClick}>
+            ActionButton
+          </div>
           <span>
             <img
               className="related_product_image"

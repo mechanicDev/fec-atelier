@@ -14,6 +14,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553,
+      features: [],
       myOutfit: []
     };
     this.changeProduct = this.changeProduct.bind(this);
@@ -39,28 +40,45 @@ class App extends React.Component {
       })
   }
 
+  componentDidMount() {
+    console.log('This is running how many times???')
+    $.ajax({
+      url: `/products/${this.state.item_id}`,
+      method: 'GET',
+      success: data => {
+        this.setState({features: data.features})
+      }
+    })
+  };
+
+  componentDidUpdate() {
+
+  }
+
   render() {
     return (
       <div>
-        <h1>Atelier</h1>
-        <div className="main">
-          <div className="overview-widget">
+        {/* <h1>Atelier</h1> */}
+        {/* <div className="main"> */}
+          {/* <div className="overview-widget"> */}
             {/* <Overview itemid={this.state.item_id} */}
             {/* addToOutfit={this.addToOutfit}/> */}
-          </div>
+          {/* </div> */}
           {/* <QA itemid={this.state.item_id} /> */}
-          <div className="ratings">
+          {/* <div className="ratings"> */}
             {/* <Ratings itemid={this.state.item_id} /> */}
-          </div>
+          {/* </div>
         </div>
-        <div>
+        <div> */}
+          {/* <h3>Related Products</h3> */}
           <RelatedItems
             itemId={this.state.item_id}
+            features={this.state.features}
             changeProduct={this.changeProduct} />
-        </div>
-        <div>
+        {/* </div> */}
+        {/* <div> */}
           {/* <Outfits itemId={this.state.item_id} /> */}
-        </div>
+        {/* </div> */}
       </div>
     );
   }
