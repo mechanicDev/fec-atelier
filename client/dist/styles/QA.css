@@ -17,14 +17,32 @@
 
 /* ========== Questions ========== */
 
-.q-base {
+.questions {
   max-height: 75vh;
   overflow-y: auto;
   margin-bottom: 15px;
 }
 
-.question {
+.questions::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 4px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: #AAAAAA;
+}
+
+.q-base {
+  padding: 0;
   list-style-type: none;
+}
+
+.q-label {
+  font-size: 15px;
+  font-weight: bold;
+  margin-right: 8px;
 }
 
 .q-body {
@@ -35,6 +53,10 @@
 .q-helpful {
   font-size: 11px;
   margin-top: 1px;
+}
+
+.help-yes {
+  text-decoration: underline;
 }
 
 .q-help-count {
@@ -56,6 +78,7 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  margin-top: 15px;
 }
 
 .q-bar {
@@ -72,17 +95,28 @@
 
 /* ========== Answers ========== */
 
-.answer {
+.answers {
+  padding: 0;
   list-style-type: none;
 }
 
 .a-label {
-  float: left;
+  display: flex;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-right: 8px;
 }
 
-.answer-list {
-  margin-left: 20px;
-  margin-bottom: 15px;
+.a-label-list {
+  display: flex;
+  flex-flow: row nowrap;
+  /* justify-content: left; */
+}
+
+.a-list {
+  display: flex;
+  flex-flow: column nowrap;
+  margin-top: 3px;
 }
 
 .answer-body {
@@ -146,9 +180,30 @@
   display: flex;
   font-size: 10px;
   font-weight: bold;
-  margin-left: 20px;
   margin-top: 15px;
-  margin-bottom: 15px;
+}
+
+/* ========== Answer Photos ========== */
+
+.a-thumbnail-modal {
+  display: flex;
+  flex-flow: column nowrap;
+  max-height: 100vh;
+  max-width: 100vh;
+}
+
+.close-a-thumbnail {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 13px;
+  cursor: default;
+  margin-right: -5px;
+  margin-bottom: 5px;
+}
+
+.a-clicked-thumbnail {
+  display: flex;
+  margin-right: 10px;
 }
 
 /* ========== Search Bar ========== */
@@ -156,7 +211,6 @@
 .qa-search {
   width: 100%;
   margin-top: 15px;
-  margin-bottom: 15px;
   border: 1px solid black;
   display: flex;
   flex-flow: row nowrap;
@@ -188,7 +242,7 @@ input.qa-search-bar {
   font-size: 14px;
 }
 
-/* ========== Question Modal ========== */
+/* ========== Modals ========== */
 
 .qa-modal {
   width: 100%;

@@ -5,7 +5,7 @@ const ProductBreakdowns = (props) => {
 
     let product_breakdowns = props.characteristics_list.map((characteristic) => {
       return (
-          <ProductBreakdownItem key={characteristic.id} star_number={characteristic.value} star_count={characteristic.inner_characteristic}></ProductBreakdownItem>
+          <ProductBreakdownItem key={characteristic.id} char_count={characteristic.value} characteristic={characteristic.inner_characteristic}></ProductBreakdownItem>
       )
     });
 

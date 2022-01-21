@@ -29,7 +29,7 @@ jest.mock('axios');
 //   done();
 // })
 
-xdescribe('Overview', function() {
+describe('Overview', function() {
 
   describe('Render Overview Widget', function() {
 

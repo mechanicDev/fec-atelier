@@ -1,6 +1,23 @@
 const axios = require('axios');
 // ========== Shared ========== //
 
+const addInteraction = (metrics, callback) => {
+  let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/interactions`;
+  return axios.post(endpoint, metrics, {
+    headers: {
+      "Authorization": process.env.API_KEY
+    }
+  })
+  .then(res => {
+    callback(res.data);
+  })
+  .catch(err => {
+    callback(err);
+  });
+}
+
+module.exports.addInteraction = addInteraction;
+
 // ========== Overview ========== //
 
 const getProductDataByItem = (product_id, callback) => {
@@ -182,12 +199,12 @@ module.exports.submitQuestion = submitQuestion;
 
 // ========== Ratings & Reviews ========== //
 
-const getReviewsByItem = (product_id, callback) => {
-  let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/reviews?product_id=${product_id}`;
+const getReviewsByItem = (product_id, sortOrder, count, callback) => {
+  let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/reviews?count=${count}&sort=${sortOrder}&product_id=${product_id}`;
+
   axios.get(endpoint, {
     headers : {
       Authorization : process.env.API_KEY,
-      sort: 'newest'
     }
   })
   .then((response) => {
@@ -207,7 +224,6 @@ const getReviewsMetaByItem = (product_id, callback) => {
     }
   })
   .then((response => {
-    //console.log('metadata recieved by apiCalls: ', metadata.data);
     callback(null, response.data);
   }))
   .catch((err) => {
@@ -215,5 +231,43 @@ const getReviewsMetaByItem = (product_id, callback) => {
   })
 }
 
+const putMarkReviewHelpful = (review_id, callback) => {
+
+  let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/reviews/${review_id}/helpful`;
+  return axios.put(endpoint, {}, {
+    headers : {
+      "Authorization" : process.env.API_KEY
+    }
+  })
+  .then((response => {
+    callback(null, response.data);
+  }))
+  .catch((err) => {
+    console.log('Error marking helpful at apicalls: ', err)
+  })
+}
+
+const newReview = (reviewData, callback) => {
+
+  let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/reviews`;
+
+  reviewData.product_id = Number(reviewData.product_id);
+  reviewData.recommend = Boolean(reviewData.recommend);
+
+  return axios.post(endpoint, reviewData, {
+    headers : {
+      "Authorization" : process.env.API_KEY
+    }
+  })
+  .then((response => {
+    callback(null, response.data);
+  }))
+  .catch((err) => {
+    console.log('Error submitting new review: ', err)
+  })
+}
+
 module.exports.getReviewsByItem = getReviewsByItem;
 module.exports.getReviewsMetaByItem = getReviewsMetaByItem;
+module.exports.putMarkReviewHelpful = putMarkReviewHelpful;
+module.exports.newReview = newReview;

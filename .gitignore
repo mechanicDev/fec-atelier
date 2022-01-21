@@ -73,6 +73,7 @@ typings/
 .env.test
 dwightApiKey.js
 config.js
+*.pem
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

@@ -1,18 +1,52 @@
+.ratings_widget {
+  width: 866px;
+  max-height: 99vh;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: block;
+  font-family: sans-serif;
+}
+
+.ratings_list_widget {
+  width: 60%;
+  float: right;
+  font-family: sans-serif;
+}
+
+.visible_scrollbar {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+}
+
 .ratings_meta {
   float: left;
-  width: 25%;
-  margin-left: 25px;
+  width: 40%;
+  font-family: sans-serif;
+}
+
+.review_sort_bar {
+  float: left;
+  margin-right: 39%;
 }
 
 .ratings_list {
   float: right;
-  width: 70%;
+  width: 100%;
   list-style-type: none;
+  font-family: sans-serif;
 }
 
 .star_count_list {
   list-style-type: none;
   margin-bottom: 25px;
+  font-size: 13px;
+  float: left;
+  padding: 0;
 }
 
 .ratings_average {
@@ -25,8 +59,16 @@
   width: 30%;
 }
 
-.star_ratings {
+.list {
   list-style-type: none;
+}
+
+.link {
+  text-decoration: underline;
+}
+
+.star_counts {
+  float:left;
 }
 
 .individual_review {
@@ -50,21 +92,45 @@
 
 .percent_recommending {
   float: left;
+  width: 100%;
+  font-family: sans-serif;
 }
 
 .product_breakdown {
   list-style-type: none;
   float: left;
+  width: 100%;
+  padding: 0;
+}
+
+.product_breakdown_list_item {
+  float: left;
+  width: 100%;
 }
 
 .review_response {
   background-color: rgb(196, 230, 218);
 }
 
+.review_helpful {
+  text-decoration: underline;
+}
+
 .review_image {
-  max-width: 3%;
+  max-width: 4%;
   height: auto;
   float: left;
+}
+
+.btn {
+  width: 179px;
+  height: 55px;
+  background-color: white;
+  border: 1px solid black;
+  font-size: 14px;
+  font-weight: bold;
+  float: left;
+  margin-right: 20px;
 }
 
 .left {
@@ -75,34 +141,47 @@
   float: right;
 }
 
+.indent {
+  padding-left: 19%;
+}
+
+.indent_less {
+  padding-left: 18%;
+}
+
 .triangle {
   width: 20px;
   height: 15px;
   z-index: 0;
-  position: absolute;
+  bottom: 15px;
+  position: relative;
 }
 
-.rating{
-  width: calc(15px * 3);
+.review_modal_input {
+  font-size: xx-small;
+}
+
+.rating {
+  width: 0;
   height: 15px;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="-40 -40 80 80"><path fill="black" stroke="black" stroke-width="2"  d="M 0.000 20.000 L 23.511 32.361 L 19.021 6.180 L 38.042 -12.361 L 11.756 -16.180 L 0.000 -40.000 L -11.756 -16.180 L -38.042 -12.361 L -19.021 6.180 L -23.511 32.361 L 0.000 20.000 "/></svg>');
-  position:relative;
+  position: relative;
 }
 
 .rating:before {
-  content:"";
-  position:absolute;
+  content: "";
+  position: absolute;
   top:0;
   bottom:0;
   left:0;
   width: calc(15px * 5);
-  z-index:-1;
+  z-index: -1;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="-40 -40 80 80"><path fill="transparent" stroke="black" stroke-width="2"  d="M 0.000 20.000 L 23.511 32.361 L 19.021 6.180 L 38.042 -12.361 L 11.756 -16.180 L 0.000 -40.000 L -11.756 -16.180 L -38.042 -12.361 L -19.021 6.180 L -23.511 32.361 L 0.000 20.000 "/></svg>');
 }
 
 .star_bar {
-  width: 200px;
-  left: 70px;
+  width: 600px;
+  left: 3%;
   height: 15px;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="40" ><rect fill="green" stroke-width="0" width="400" height="30"/></svg>');
   position: absolute;
@@ -111,15 +190,26 @@
 .star_bar:before {
   content:"";
   position: absolute;
-  width: 400px;
+  width: 605px;
   height: 15px;
   z-index:-1;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="40" ><rect fill="gray" stroke-width="0" width="400" height="30"/></svg>');
 }
 
+.star_bar_outer {
+  text-decoration: underline;
+}
+.star_bar_outer:hover {
+  background-color: rgb(164, 247, 247);
+}
+
+.char_label_main {
+  float: left;
+}
+
 .characteristic {
   float: left;
-  width: 445px;
+  width: 100%;
   height: 15px;
   z-index:-1;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="40" ><rect fill="gray" stroke-width="0" width="400" height="15"/></svg>');

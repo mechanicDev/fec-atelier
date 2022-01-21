@@ -64,15 +64,14 @@ class ProductInfo extends React.Component {
     if (this.props.salePrice !== null) {
       return (
         <div>
-          <div className="og-price" style={ogStyles}>{this.props.originalPrice}</div>
-          <div className="sale-price" style={saleStyles}>{this.props.salePrice}</div>
+          <div className="og-price" style={ogStyles}>${this.props.originalPrice}</div>
+          <div className="sale-price" style={saleStyles}>${this.props.salePrice}</div>
         </div>
       )
     } else {
       return (
         <div>
-          <div className="og-price">{this.props.originalPrice}</div>
-          <div className="sale-price">{this.props.salePrice}</div>
+          <div className="og-price">${this.props.originalPrice}</div>
         </div>
       )
     }
@@ -92,18 +91,16 @@ class ProductInfo extends React.Component {
 
     return (
       <div className="product-info" data-testid="product-info">
-        <h4>Product Info</h4>
         {this.state.starCount.length ?
           <div className="star-rating" data-testid="star-rating">
             <StarRating star_rating={this.calculateStarRating()}></StarRating>
-            <a href="#reviews-link">{` Read all ${numReviews} reviews`}</a>
+            <a className ="overview-review" href="#reviews-link" onClick={this.props.render}>{` Read all ${numReviews} reviews`}</a>
           </div>
           : null
         }
-        {this.props.productData ? <div>{this.props.productData.category}</div> : null}
+        {this.props.productData ? <div className="category">{this.props.productData.category}</div> : null}
+        {this.props.productData ? <div className="product-name">{this.props.productData.name}</div> : null}
         {this.getPrice()}
-        {this.props.productData ? <div>{this.props.productData.name}</div> : null}
-        {this.props.productData ? <div>{this.props.productData.description}</div> : null}
     </div>
     )
   }

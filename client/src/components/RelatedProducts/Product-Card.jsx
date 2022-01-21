@@ -27,6 +27,10 @@ class ProductCard extends React.Component {
   }
 
   render() {
+    // if (!this.state.item.styles[0].photos[0].thumbnail_url) {
+    //   this.state.item.styles[0].photos[0].thumbnail_url =
+    // }
+    // console.log('State Props: ', this.state)
     if (this.state.type === 'related') {
       return (
         <div

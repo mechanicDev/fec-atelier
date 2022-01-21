@@ -2,13 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import _ from 'underscore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faShoppingCart, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 class AddToCart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sku: 2122777,
+      sku: '2122777',
       selectedSize: undefined,
       selectedQuantity : 0,
       totalQuantity: null,
@@ -16,7 +16,8 @@ class AddToCart extends React.Component {
     };
   }
 
-  addToCart = () => {
+  addToCart = (e) => {
+    this.props.render(e);
     if (this.state.selectedSize === undefined) {
       alert('Please select a size');
       return;
@@ -29,7 +30,8 @@ class AddToCart extends React.Component {
     })
   }
 
-  addToMyOutfit = () => {
+  addToMyOutfit = (e) => {
+    this.props.render(e);
     let newOutfit = this.state.myOutfit
     _.contains(this.state.myOutfit, this.state.sku) ?
       (newOutfit.splice(newOutfit.indexOf(this.state.sku), 1),
@@ -46,11 +48,12 @@ class AddToCart extends React.Component {
   }
 
   selectSize = (e) => {
+    this.props.render(e);
     let entries = Object.entries(this.props.styleData.skus)
     for (let i = 0; i < entries.length; i++) {
       if (entries[i][1].size === e.target.value) {
         this.setState({
-          selectedSize: Number(e.target.value),
+          selectedSize: e.target.value,
           sku: Number(entries[i][0]),
           totalQuantity: entries[i][1].quantity,
           selectedQuantity: 1
@@ -69,6 +72,7 @@ class AddToCart extends React.Component {
   }
 
   selectQuantity = (e) => {
+    this.props.render(e);
     this.setState({
       selectedQuantity: e.target.value
     })
@@ -88,10 +92,10 @@ class AddToCart extends React.Component {
 
   render() {
     return (
-      <div className="add-to-cart" data-testid="add-to-cart">
-        <div className="size-selector"> Select a Size
-          <select value={this.state.selectedSize} onChange={this.selectSize}>
-            <option value="default">-</option>
+      <div className="add-to-cart-area" data-testid="add-to-cart">
+        <div>
+          <select className="size-selector" value={this.state.selectedSize} onChange={this.selectSize}>
+            <option value="default">Select Size</option>
             {this.props.styleData !== undefined ? _.map(this.getSizes(), (size, index) => {
               return (<option key={index} value={size}>{size}</option>)
             }) : null
@@ -99,21 +103,19 @@ class AddToCart extends React.Component {
           </select>
         </div>
 
-        <div className="qty-selector"> Select a Quantity
-          <select onChange={this.selectQuantity} disabled={!this.state.selectedSize}>
+        <div>
+          <select className="qty-selector" onChange={this.selectQuantity} disabled={!this.state.selectedSize}>
             {!this.state.selectedSize ? <option value="default">-</option> :
               this.state.totalQuantity !== 0 ? _.map(this.mapQuantity(), (number, index) => {
                 return (<option key={index} value={number}>{number}</option>)
                   }) : <option value='outOfStock'>Out Of Stock</option>}
           </select>
         </div>
-        <div> Add To Cart
-          <FontAwesomeIcon className="add-button" icon={faShoppingCart} onClick={this.addToCart}></FontAwesomeIcon>
+        <div className="add-to-bag"> Add To Bag
+          <FontAwesomeIcon aria-label="add to bag button" className="add-to-bag-button" icon={faShoppingCart} onClick={this.addToCart}></FontAwesomeIcon>
         </div>
+        <FontAwesomeIcon className="my-outfit-btn" icon={faStar} onClick={this.addToMyOutfit}></FontAwesomeIcon>
 
-        <div className="add-to-my-outfit"> Add To My Outfit
-          <FontAwesomeIcon className="add-button" icon={faStar} onClick={this.addToMyOutfit}></FontAwesomeIcon>
-        </div>
       </div>
     )
   }

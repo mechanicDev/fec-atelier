@@ -11,7 +11,9 @@ class QA extends React.Component {
     this.state = {
       originalQuestions: [],
       questions: [],
-      page: 1
+      page: 1,
+      product_name: '',
+      loaded: false
     };
   }
 
@@ -23,43 +25,112 @@ class QA extends React.Component {
         questions: this.sortByTerm(this.state.originalQuestions, text)
       })
     } else {
-      this.setState({questions: this.state.originalQuestions});
+      this.setState({questions: this.revertQuestions(this.state.originalQuestions)});
     }
   }
 
-  sortByTerm(questions, sortTerm) {
-    return _.filter(questions, q => {
-      if (q.question_body.includes(sortTerm)) {
-        return true;
-      }
-    })
-  }
-
-  getQAData() {
-    $.ajax({
-      url: `/qa/questions/${this.props.itemid}/${this.state.page}`,
-      method: 'GET',
-      success: data => {
-        let newQuestions = _.flatten(this.state.originalQuestions.slice().concat(data.results));
-        let newPage = this.state.page + 1;
-        this.setState({
-          questions: newQuestions,
-          originalQuestions: newQuestions,
-          page: newPage
+  revertQuestions(questions) {
+    return _.map(questions, q => {
+      let questionBody = q.question_body;
+      let newQuestion = [];
+      if (typeof questionBody !== 'string') {
+        _.each(questionBody, qb => {
+          if (typeof qb !== 'string') {
+            let reverted = qb.props.children;
+            newQuestion.push(reverted);
+          } else {
+            newQuestion.push(qb);
+          }
         })
-      }
-    })
-  }
 
-  updateQuestionHelp(question_id) {
-    let updatedQuestions = _.map(this.state.originalQuestions, q => {
-      if (q.question_id === question_id) {
-        q.question_helpfulness ++;
+        q.question_body = newQuestion.join('');
         return q;
       } else {
         return q;
       }
     })
+  }
+
+  sortByTerm(questions, sortTerm) {
+    let filtered = _.filter(this.revertQuestions(questions), q => {
+      if (q.question_body.toLowerCase().includes(sortTerm.toLowerCase())) {
+        return true;
+      }
+    })
+
+    return _.map(filtered, q => {
+      let questionBody = q.question_body.split('');
+      let newQuestion = [];
+      for (let i = 0; i < questionBody.length; i++) {
+        if (questionBody.slice(i, i + sortTerm.length).join('').toLowerCase() === sortTerm.toLowerCase()) {
+          newQuestion.push(<mark>{questionBody.slice(i, i + sortTerm.length).join('')}</mark>);
+          i += sortTerm.length - 1;
+        } else {
+          newQuestion.push(questionBody[i]);
+        }
+      }
+
+      q.question_body = newQuestion;
+      return q;
+    })
+  }
+
+  getQAData() {
+    if (!this.state.loaded) {
+      $.ajax({
+        url: `/qa/questions/${this.props.itemid}/${this.state.page}`,
+        method: 'GET',
+        success: data => {
+          if (data.results.length < 4) {
+            this.setState({ loaded: true });
+          } else {
+            let newQuestions = _.flatten(this.state.originalQuestions.slice().concat(data.results));
+            let newPage = this.state.page + 1;
+            this.setState({
+              questions: newQuestions,
+              originalQuestions: newQuestions,
+              page: newPage
+            })
+          }
+        }
+      })
+    }
+  }
+
+  getProductName() {
+    $.ajax({
+      url: `/products/${this.props.itemid}`,
+      method: 'GET',
+      success: data => {
+        this.setState({
+          product_name: data.name
+        });
+      },
+      error: err => {
+        alert(err);
+      }
+    })
+  }
+
+  updateQuestionHelp(question_id) {
+    let questionIndex;
+    let updatedQuestions = _.map(this.state.originalQuestions, (q, index) => {
+      if (q.question_id === question_id) {
+        q.question_helpfulness ++;
+        questionIndex = index;
+        return q;
+      } else {
+        return q;
+      }
+    })
+
+    if (typeof questionIndex === 'number') {
+      if (updatedQuestions[questionIndex].question_helpfulness > updatedQuestions[questionIndex - 1].question_helpfulness) {
+        let placeholder = updatedQuestions[questionIndex];
+        updatedQuestions[questionIndex] = updatedQuestions[questionIndex - 1];
+        updatedQuestions[questionIndex - 1] = placeholder;
+      }
+    }
 
     this.setState({
       originalQuestions: updatedQuestions,
@@ -90,6 +161,7 @@ class QA extends React.Component {
 
   componentDidMount() {
     this.getQAData();
+    this.getProductName();
   }
 
   render() {
@@ -97,11 +169,13 @@ class QA extends React.Component {
     return (
       <div data-testid="qa" id="qa">
         <span className="qa-title">{'QUESTIONS & ANSWERS'}</span>
-        <SearchQuestion searchQuestions={this.searchQuestions.bind(this)}/>
+        <SearchQuestion searchQuestions={this.searchQuestions.bind(this)} render={this.props.render}/>
         <Questions questions={state.questions} updateQHelp={this.updateQuestionHelp.bind(this)}
-          updateAHelp={this.updateAnswerHelp.bind(this)}
-          getQAData={this.getQAData.bind(this)}
-          product_id={this.props.itemid} />
+            updateAHelp={this.updateAnswerHelp.bind(this)}
+            getQAData={this.getQAData.bind(this)}
+            product_id={this.props.itemid}
+            product_name={this.state.product_name}
+            render={this.props.render} />
       </div>
     )
   }

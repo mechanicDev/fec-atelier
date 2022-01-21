@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 
 class ReviewImages extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       modalOpen: false,
       activePicURL: ''
@@ -51,8 +51,6 @@ class ReviewImages extends React.Component {
       } else {return <div></div>}
     } else {return <div></div>}
   }
-
-
 }
 
 export default ReviewImages;

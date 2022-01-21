@@ -22,24 +22,17 @@ class AskQuestion extends React.Component {
 
   openModal(e) {
     e.preventDefault();
-    $.ajax({
-      url: `/products/${this.props.product_id}`,
-      method: 'GET',
-      success: data => {
-        this.setState({
-          modalOpen: true,
-          product_name: data.name
-        });
-      },
-      error: err => {
-        alert(err);
-      }
-    })
+    this.setState({
+      modalOpen: true,
+      product_name: this.props.product_name
+    });
+    this.props.render(e);
   }
 
   closeModal(e) {
     e.preventDefault();
     this.setState({modalOpen: false, invalid: ''});
+    this.props.render(e);
   }
 
   handleQuestion(e) {
@@ -121,7 +114,6 @@ class AskQuestion extends React.Component {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        // width: '50%',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
         border: '1px solid #000',
@@ -143,13 +135,13 @@ class AskQuestion extends React.Component {
         >
           <div className="qa-modal-top">
             <span className="q-modal-ask">Ask your question about the {this.state.product_name}</span>
-            <span className="close-qa-modal" onClick={this.closeModal.bind(this)}>X</span>
+            <span className="close-qa-modal" data-testid="close-qa-modal" onClick={this.closeModal.bind(this)}>X</span>
           </div>
           {this.state.invalid}
-          <div className="qa-modal-form">
+          <div className="qa-modal-form" data-testid="qa-modal-form">
             <div className="qa-modal-input">
               <label className="qa-modal-label" htmlFor="your-q">{'Your Question (mandatory)'}</label>
-              <textarea className="your-q" maxLength="1000"
+              <textarea className="your-q" data-testid="your-q" maxLength="1000"
                 onChange={this.handleQuestion.bind(this)}>
               </textarea>
             </div>

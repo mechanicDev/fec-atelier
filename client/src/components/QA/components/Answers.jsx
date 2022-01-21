@@ -1,7 +1,10 @@
 import React from 'react';
+import Modal from 'react-modal';
 import _ from 'underscore';
 import $ from 'jquery';
 import moment from 'moment';
+
+Modal.setAppElement('#app');
 
 class Answers extends React.Component {
   constructor(props) {
@@ -9,7 +12,9 @@ class Answers extends React.Component {
     this.state = {
       reported: false,
       votes: [],
-      thumbnails: <></>
+      thumbnails: <></>,
+      modalOpen: false,
+      currentImg: ''
     };
   }
 
@@ -22,12 +27,15 @@ class Answers extends React.Component {
     let questionHelpCount = subClasses[3];
 
     if (!this.state.votes.includes(answer_id)) {
+      let newVotes = this.state.votes.slice();
+      newVotes.push(answer_id);
       $.ajax({
         url: `/qa/answers/${answer_id}/helpful`,
         method: 'PUT',
         success: () => {
-          this.setState({votes: this.state.votes.push(answer_id)})
+          this.setState({votes: newVotes})
           this.props.updateAHelp(answer_id, this.props.question_id);
+          this.props.render(e);
         },
         error: err => {
           alert(err);
@@ -47,6 +55,7 @@ class Answers extends React.Component {
       method: 'PUT',
       success: () => {
         this.setState({reported: true});
+        this.props.render(e);
       },
       error: err => {
         alert(err);
@@ -54,16 +63,48 @@ class Answers extends React.Component {
     })
   }
 
+  openModal(e) {
+    e.preventDefault();
+    let image = e.target.src;
+    this.setState({
+      modalOpen: true,
+      currentImg: image
+    })
+  }
+
+  closeModal(e) {
+    e.preventDefault();
+    this.setState({
+      modalOpen: false
+    })
+  }
+
   componentDidMount() {
     let answer = this.props.answer;
     if (answer.photos.length > 0) {
-      this.setState({thumbnails: <div className="a-thumbnails">{_.map(answer.photos, photo => {
-        return <img className="a-thumbnail" key={photo} src={photo}></img>
+      this.setState({thumbnails: <div className="a-thumbnails">{_.map(answer.photos, (photo, index) => {
+        return <img className="a-thumbnail" key={photo.concat(index)} src={photo} onClick={this.openModal.bind(this)}></img>
       })}</div>})
     }
   }
 
   render() {
+    const modalStyle = {
+      content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+        border: '0px',
+        borderRadius: '0px',
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        fontFamily: 'sans-serif',
+        overflow: 'auto'
+      }
+    };
+
     let answer = this.props.answer;
     let answerer = answer.answerer_name;
     if (answerer === 'Seller') {
@@ -77,7 +118,7 @@ class Answers extends React.Component {
       reportButton = <span className="reported">Reported</span>
     }
 
-    return (<ul className="answer" data-testid="answers">
+    return (<ul className="answers" data-testid="answers">
       <li key={`a-${answer.id}`} data-testid={answerer}>
         <span className="answer-body">{answer.body}</span>
         {this.state.thumbnails}
@@ -88,13 +129,25 @@ class Answers extends React.Component {
             <span className="a-helpful">Helpful?</span>&nbsp;
             <span className={`a-help-count a-help-${answer.id}-${answer.helpfulness}`}
               onClick={this.answerIsHelpful.bind(this)}>
-              <u>Yes</u>&nbsp;{`(${answer.helpfulness})`}
+              <span className={`help-yes a-help-${answer.id}-${answer.helpfulness}`}>
+                Yes
+              </span>&nbsp;{`(${answer.helpfulness})`}
             </span>
           </div>
           <span className="vertical-bar">|</span>
           {reportButton}
         </div>
       </li>
+      <Modal
+        isOpen={this.state.modalOpen}
+        style={modalStyle}
+        contentLabel="View Image"
+      >
+        <div className="a-thumbnail-modal">
+          <span className="close-a-thumbnail" onClick={this.closeModal.bind(this)}>X</span>
+          {<img className="a-clicked-thumbnail" src={this.state.currentImg}></img>}
+        </div>
+      </Modal>
     </ul>)
   }
 }

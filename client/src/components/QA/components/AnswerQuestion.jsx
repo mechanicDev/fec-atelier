@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import _ from 'underscore';
 import $ from 'jquery';
-// import API_KEYS from '../../../../../env/config.js';
+import API_KEYS from '../../../../../env/config.js';
 
 // Modal.setAppElement('#app');
 
@@ -24,24 +24,17 @@ class AnswerQuestion extends React.Component {
 
   openModal(e) {
     e.preventDefault();
-    $.ajax({
-      url: `/products/${this.props.product_id}`,
-      method: 'GET',
-      success: data => {
-        this.setState({
-          modalOpen: true,
-          product_name: data.name
-        });
-      },
-      error: err => {
-        alert(err);
-      }
-    })
+    this.setState({
+      modalOpen: true,
+      product_name: this.props.product_name
+    });
+    this.props.render(e);
   }
 
   closeModal(e) {
     e.preventDefault();
     this.setState({modalOpen: false, invalid: ''});
+    this.props.render(e);
   }
 
   handleAnswer(e) {
@@ -91,36 +84,36 @@ class AnswerQuestion extends React.Component {
 
   addPhotos(e) {
     e.preventDefault();
-    // const client = filestack.init(API_KEYS.FILESTACK_API_KEY);
-    // let options = {
-    //   fromSources: ['local_file_system'],
-    //   accept: ['image/*'],
-    //   maxFiles: 5,
-    //   disableTransformer: true,
-    //   onFileSelected: file => {
-    //     if (file.size > 1000 * 1000) {
-    //       alert('File too big, select something smaller than 1MB');
-    //     }
-    //   },
-    //   onFileUploadFinished: file => {
-    //     let updatedPhotos = this.state.photos.slice();
-    //     updatedPhotos.push(file.url);
+    const client = filestack.init(API_KEYS.FILESTACK_API_KEY);
+    let options = {
+      fromSources: ['local_file_system'],
+      accept: ['image/*'],
+      maxFiles: 5,
+      disableTransformer: true,
+      onFileSelected: file => {
+        if (file.size > 1000 * 1000) {
+          alert('File too big, select something smaller than 1MB');
+        }
+      },
+      onFileUploadFinished: file => {
+        let updatedPhotos = this.state.photos.slice();
+        updatedPhotos.push(file.url);
 
-    //     let updatedThumbnails = <div className="a-modal-thumbnails">{_.map(updatedPhotos, photo => {
-    //       return <img className="a-modal-thumbnail" key={photo} src={photo}></img>
-    //     })}</div>
+        let updatedThumbnails = <div className="a-modal-thumbnails">{_.map(updatedPhotos, photo => {
+          return <img className="a-modal-thumbnail" key={photo} src={photo}></img>
+        })}</div>
 
-    //     this.setState({photos: updatedPhotos, thumbnails: updatedThumbnails});
-    //     if (this.state.photos.length === 5) {
-    //       this.setState({addPhoto: <></>})
-    //     }
-    //   },
-    //   onFileUploadFailed: file => {
-    //     alert('File upload failed');
-    //   }
-    // };
+        this.setState({photos: updatedPhotos, thumbnails: updatedThumbnails});
+        if (this.state.photos.length === 5) {
+          this.setState({addPhoto: <></>})
+        }
+      },
+      onFileUploadFailed: file => {
+        alert('File upload failed');
+      }
+    };
 
-    // client.picker(options).open();
+    client.picker(options).open();
   }
 
   submitAnswer(e) {
@@ -168,7 +161,9 @@ class AnswerQuestion extends React.Component {
 
     return (
       <div className="answer-modal" data-testid="answer-modal">
-        <span className="add-answer" onClick={this.openModal.bind(this)}><u>Add Answer</u></span>
+        <span className="add-answer" data-testid="add-answer" onClick={this.openModal.bind(this)}>
+          <u>Add Answer</u>
+        </span>
         <Modal
           isOpen={this.state.modalOpen}
           style={modalStyle}
@@ -176,7 +171,7 @@ class AnswerQuestion extends React.Component {
         >
           <div className='qa-modal-top'>
             <span className="q-modal-answer">Submit your answer</span>
-            <span className="close-qa-modal" onClick={this.closeModal.bind(this)}>X</span>
+            <span className="close-qa-modal" data-testid="close-qa-modal" onClick={this.closeModal.bind(this)}>X</span>
           </div>
           <span className="a-modal-subtitle">{this.state.product_name}: {this.props.question_body}</span>
           {this.state.invalid}

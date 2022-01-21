@@ -9,24 +9,37 @@ class IndividualReview extends React.Component {
     this.state = {
       body: this.props.body,
       truncatedBody: this.props.body.slice(0, 249),
-      truncated: false
+      truncated: false,
+      helpfulCount: 0,
+      helpfulClicked: false
     };
+    this.updateHelpfulClicked = this.updateHelpfulClicked.bind(this);
   }
 
   showMore(e) {
-    e.preventDefault();
     this.setState({truncated: false});
   }
 
   componentDidMount() {
     if (this.state.truncatedBody !== this.state.body) {
-      this.state.truncated = true;
+      this.setState({truncated: true});
     }
+
+    this.setState({helpfulCount: this.props.helpfulness});
+  }
+
+  updateHelpfulClicked() {
+    this.setState({
+      helpfulCount: this.state.helpfulCount + 1,
+      helpfulClicked: true
+    })
   }
 
   render(props) {
 
     if (this.props) {
+
+      const review_id = this.props.review_id;
       const date = this.props.date;
       const star_rating = this.props.star_rating;
       const summary = this.props.summary;
@@ -36,6 +49,9 @@ class IndividualReview extends React.Component {
       const body = this.state.body;
       const truncatedBody = this.state.truncatedBody;
       const photos = this.props.photos;
+      const helpful = this.state.helpfulCount;
+      const chooseHelpful = this.props.chooseHelpful;
+      const putMarkHelpful = this.props.putMarkHelpful;
 
       return (
         <div data-testid="individual-review" className="individual_review">
@@ -43,12 +59,14 @@ class IndividualReview extends React.Component {
             <div>
               <span className="individual_star_rating"><StarRating star_rating={star_rating}></StarRating></span><span className="user_name_date">{reviewer_name}, {moment(date).format('LL')}</span>
             </div>
-          <br></br><b>{summary}</b>
+          <br></br><br></br><b>{summary}</b>
           {this.state.truncated ? <div>{truncatedBody}<br></br><button onClick={this.showMore.bind(this)} >Show More</button></div>: <div>{body}</div>}
           <br></br><ReviewImages photos={photos}></ReviewImages>
           <br></br> {recommend ? <img src={'images/transparent-background-check-mark.png'} alt='loading' width="10" height="10"/>: null}{recommend ? " I recommend this product.": null}
           <br></br><br></br>
           {response ? <div className="review_response">Response from seller:<br></br>{response}</div>: null}
+          <br></br>
+          <span>Helpful? {!this.state.helpfulClicked ? <span className="review_helpful" onClick={(e) => { chooseHelpful(review_id, e); this.updateHelpfulClicked();} }>Yes</span> : <span className="review_helpful">Yes</span>} ({helpful})</span>
           </li>
         </div>
       )
