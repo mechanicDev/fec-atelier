@@ -1,11 +1,12 @@
 import React from 'react';
 
-let TableRow = (item1, catergory, item2) => {
-  (<tr>
-    <th>Value for item1: {item1}</th>
-    <th>Has Thing?: {catergory}</th>
-    <th>Value for item2: {item2}</th>
-  </tr>)
-}
+let TableRow = props => {
+  return (
+    <div>
+        <span>{props.values[0] || 'No Value'}</span>
+        <span>{props.featureName}</span>
+        <span>{props.values[1] || 'No Value'}</span>
+    </div>
+  )}
 
 export default TableRow

@@ -43,7 +43,7 @@ class RelatedItems extends React.Component {
   }
 
   onModalOpen(e) {
-    console.log('this is the event: ', e.target)
+
   }
 
   handleStarClick(related) {
@@ -68,7 +68,10 @@ class RelatedItems extends React.Component {
         combined[currentFeature] = [combined[currentFeature][0], currentItemFeatureValue]
       }
     }
-    this.setState({combinedItemFeatures: combined})
+    this.setState({
+      combinedItemFeatures: combined,
+      showModal: !this.state.showModal
+    })
   }
 
   componentWillReceiveProps({features}) {
@@ -101,7 +104,12 @@ class RelatedItems extends React.Component {
             shouldCloseOnOverlayClick={true}
             onRequestClose={this.closeModalOnClick}
           >
-
+            {Object.keys(this.state.combinedItemFeatures).map(feature => {
+              return <TableRow
+                key={feature}
+                featureName={feature}
+                values={this.state.combinedItemFeatures[feature]}/>
+            })}
           </ReactModal>
       <Carousel
         show={3.5}
