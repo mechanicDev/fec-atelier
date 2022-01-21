@@ -17,10 +17,10 @@ class App extends React.Component {
       features: [],
       myOutfit: []
     };
-    this.changeProduct = this.changeProduct.bind(this);
+    this.changeProductOnCardClick = this.changeProductOnCardClick.bind(this);
   }
 
-  changeProduct(id) {
+  changeProductOnCardClick(id) {
     this.setState({ item_id: id });
   }
 
@@ -58,27 +58,27 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        {/* <h1>Atelier</h1> */}
-        {/* <div className="main"> */}
-          {/* <div className="overview-widget"> */}
-            {/* <Overview itemid={this.state.item_id} */}
-            {/* addToOutfit={this.addToOutfit}/> */}
-          {/* </div> */}
-          {/* <QA itemid={this.state.item_id} /> */}
-          {/* <div className="ratings"> */}
-            {/* <Ratings itemid={this.state.item_id} /> */}
-          {/* </div>
+        <h1>Atelier</h1>
+        <div className="main">
+          <div className="overview-widget">
+            <Overview itemid={this.state.item_id}
+              addToOutfit={this.addToOutfit} />
+          </div>
+          <QA itemid={this.state.item_id} />
+          <div className="ratings">
+            <Ratings itemid={this.state.item_id} />
+          </div>
         </div>
-        <div> */}
-          {/* <h3>Related Products</h3> */}
+        <div>
+          <h3>Related Products</h3>
           <RelatedItems
             itemId={this.state.item_id}
             features={this.state.features}
-            changeProduct={this.changeProduct} />
-        {/* </div> */}
-        {/* <div> */}
-          {/* <Outfits itemId={this.state.item_id} /> */}
-        {/* </div> */}
+            changeProductOnCardClick={this.changeProductOnCardClick} />
+        </div>
+        <div>
+          <Outfits itemId={this.state.item_id} />
+        </div>
       </div>
     );
   }

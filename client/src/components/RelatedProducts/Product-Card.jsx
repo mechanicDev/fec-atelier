@@ -10,14 +10,15 @@ class ProductCard extends React.Component {
       item: props.item,
       showModal: false
     };
-    this.handleCardClick = this.handleClick.bind(this);
+    this.cardClickHandler = this.cardClickHandler.bind(this);
+    this.handleCardClick = props.handleCardClick;
     this.handleStarClick = this.handleStarClick.bind(this);
     this.sendItemFeatures = props.handleStarClick;
   }
 
-  handleClick(e) {
+  cardClickHandler(e) {
     e.preventDefault();
-    // this.changeProduct(this.props.item.id);
+    console.log('This is the ID: ', this.state.item.id)
   }
 
   handleStarClick(e) {
@@ -30,7 +31,8 @@ class ProductCard extends React.Component {
       return (
         <div
           className='product_card related_product'
-          id={this.state.id}>
+          id={this.state.id}
+          onClick={this.cardClickHandler}>
           <div
             className={"actionButton"}
             onClick={this.handleStarClick}>

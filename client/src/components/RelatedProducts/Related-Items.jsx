@@ -16,7 +16,7 @@ class RelatedItems extends React.Component {
       currentItemFeatures: props.features,
       combinedItemFeatures: {}
     };
-    this.changeProduct = props.changeProduct;
+    this.changeProductOnCardClick = props.changeProductOnCardClick;
     this.handleClick = this.handleClick.bind(this);
     this.closeModalOnClick = this.closeModalOnClick.bind(this);
     this.handleStarClick = this.handleStarClick.bind(this);
@@ -123,7 +123,7 @@ class RelatedItems extends React.Component {
             mainItem={this.props.itemId}
             type={'related'}
             item={item}
-            handleCardClick = {this.handleClick}
+            handleCardClick = {this.changeProductOnCardClick}
             handleStarClick = {this.handleStarClick}
           />)
         })}
