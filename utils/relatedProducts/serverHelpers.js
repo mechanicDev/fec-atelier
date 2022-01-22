@@ -19,6 +19,7 @@ module.exports.getRelatedItems = id => {
 // Return the product details of each item
 
 module.exports.getSingleItemDetails = products => {
+  console.log('Products: ', products)
   return Promise.all(products.map(id => {
     let endpoint = `https://app-hrsei-api.herokuapp.com/api/fec2/hr-rpp/products/${id}`;
     return axios.get(endpoint, {

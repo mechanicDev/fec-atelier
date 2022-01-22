@@ -18,7 +18,7 @@ class ProductCard extends React.Component {
 
   cardClickHandler(e) {
     e.preventDefault();
-    console.log('This is the ID: ', this.state.item.id)
+    this.handleCardClick(this.state.item.id)
   }
 
   handleStarClick(e) {
@@ -27,10 +27,6 @@ class ProductCard extends React.Component {
   }
 
   render() {
-    // if (!this.state.item.styles[0].photos[0].thumbnail_url) {
-    //   this.state.item.styles[0].photos[0].thumbnail_url =
-    // }
-    // console.log('State Props: ', this.state)
     if (this.state.type === 'related') {
       return (
         <div

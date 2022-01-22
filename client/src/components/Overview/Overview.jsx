@@ -14,6 +14,7 @@ class Overview extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      itemid : props.itemid,
       productData : '',
       styleData : '',
       photo: '',
@@ -21,6 +22,14 @@ class Overview extends React.Component {
       currentPhoto: 0,
       numberOfPhotos: 0,
     };
+  }
+
+  UNSAFE_componentWillReceiveProps({itemid}) {
+    this.setState({itemid})
+    setTimeout(() => {
+      this.grabProductData();
+      this.grabStylesData();
+    }, 50)
   }
 
   grabProductData = async () => {
@@ -103,10 +112,10 @@ class Overview extends React.Component {
     });
   }
 
-  componentDidMount() {
-    this.grabProductData();
-    this.grabStylesData();
-  }
+  // componentDidMount() {
+  //   this.grabProductData();
+  //   this.grabStylesData();
+  // }
 
   render() {
     return (
@@ -129,8 +138,13 @@ class Overview extends React.Component {
           this.state.styleData[this.state.selectedStyle].name : null}
           selectedStyle={Number(this.state.selectedStyle)}/>
 
-        <AddToCart render={this.props.render} productName={this.state.productData.name} styleData={this.state.styleData[this.state.selectedStyle]}
-        addToOutfit={this.props.addToOutfit}/>
+        <AddToCart
+          render={this.props.render}
+          productName={this.state.productData.name}
+          styleData={this.state.styleData[this.state.selectedStyle]}
+          addToOutfit={this.props.addToOutfit}
+          id={this.state.itemid}
+        />
 
         {this.state.productData.description !== undefined ?
         <ProductDescription desc={this.state.productData.description}></ProductDescription> : null}

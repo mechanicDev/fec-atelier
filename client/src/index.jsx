@@ -21,9 +21,6 @@ class App extends React.Component {
       item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553,
       features: [],
       myOutfit: [],
-      //item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553,
-      item_id: 59557,
-      myOutfit: [],
       darkmode: false
     };
     this.changeProductOnCardClick = this.changeProductOnCardClick.bind(this);
@@ -52,7 +49,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('This is running how many times???')
     $.ajax({
       url: `/products/${this.state.item_id}`,
       method: 'GET',
@@ -62,12 +58,7 @@ class App extends React.Component {
     })
   };
 
-  componentDidUpdate() {
-
-  }
-
   render() {
-
     let darkModeStyle = this.state.darkmode ? {
       'background-color': 'rgb(29, 29, 29)',
       'color': 'rgb(221, 221, 221)'
@@ -81,28 +72,31 @@ class App extends React.Component {
           <div className="overview-widget">
             <ClickTrackerOverview render={sendMetrics => {
               return <Overview itemid={this.state.item_id}
-              addToOutfit={this.addToOutfit}
+              addToOutfit={this.addToOutfit.bind(this)}
               render={sendMetrics}/>
             }} />
           </div>
-          <div>
+          {/* <div>
             <ClickTracker render={sendMetrics => {
               return <QA itemid={this.state.item_id} render={sendMetrics} />
             }} />
-          </div>
-          <div className="ratings">
+          </div> */}
+          {/* <div className="ratings">
             <Ratings itemId={this.state.item_id} />
-          </div>
+          </div> */}
         </div>
-        <div>
+        <div className={'relatedProducts', 'carousel'}>
           <h3>Related Products</h3>
           <RelatedItems
             itemId={this.state.item_id}
             features={this.state.features}
             changeProductOnCardClick={this.changeProductOnCardClick} />
         </div>
-        <div>
-          <Outfits itemId={this.state.item_id} />
+        <div className={'outfit', 'carousel'}>
+          <Outfits
+            itemId={this.state.item_id}
+            outfit = {this.state.myOutfit}
+            />
         </div>
       </div>
     );

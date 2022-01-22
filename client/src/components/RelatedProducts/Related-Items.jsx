@@ -74,13 +74,13 @@ class RelatedItems extends React.Component {
     })
   }
 
-  componentWillReceiveProps({features}) {
+  UNSAFE_componentWillReceiveProps({features}) {
     this.setState({currentItemFeatures: features})
   }
 
   render() {
     if (!this.state.relatedItems.length) {
-      return <div className="blank_Load"></div>
+      return <div key={this.props.itemId} className="blank_Load"></div>
     }
     return (
       <div onClick={this.onclick}>

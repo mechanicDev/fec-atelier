@@ -8,12 +8,17 @@ class AddToCart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: props.id,
       sku: '2122777',
       selectedSize: undefined,
       selectedQuantity : 0,
       totalQuantity: null,
       myOutfit: []
     };
+  }
+
+  UNSAFE_componentWillReceiveProps({id}) {
+    this.setState({id})
   }
 
   addToCart = (e) => {
@@ -33,17 +38,17 @@ class AddToCart extends React.Component {
   addToMyOutfit = (e) => {
     this.props.render(e);
     let newOutfit = this.state.myOutfit
-    _.contains(this.state.myOutfit, this.state.sku) ?
-      (newOutfit.splice(newOutfit.indexOf(this.state.sku), 1),
+    _.contains(this.state.myOutfit, this.state.id) ?
+      (newOutfit.splice(newOutfit.indexOf(this.state.id), 1),
         this.setState((state, props) => ({
           myOutfit: newOutfit
         }), () => {
-          this.props.addToOutfit(this.state.sku)
+          this.props.addToOutfit(this.state.id)
         })) :
       this.setState((state, props) => ({
-        myOutfit: state.myOutfit.concat([state.sku])
+        myOutfit: state.myOutfit.concat([state.id])
       }), () => {
-        this.props.addToOutfit(this.state.sku)
+        this.props.addToOutfit(this.state.id)
       })
   }
 

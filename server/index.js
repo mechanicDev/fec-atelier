@@ -69,6 +69,25 @@ app.get('/relatedItems', (req, res) => {
     .catch(e => e);
 });
 
+// ========== Outfit ========== //
+
+app.get('/outfit', (req,res) => {
+  console.log('This is the outfit at the server: ', req.query)
+  if (!req.query.outfit) {
+    console.log('No outfit yet')
+    res.end();
+  } else {
+    let outfit = req.query.outfit;
+    console.log('Outfit inside the else: ', outfit)
+    rp.getSingleItemDetails(outfit)
+      .then(results => {
+        console.log('Results here: ', results)
+      })
+      .catch(e => console.log("oops"))
+
+  }
+})
+
 // ========== Questions & Answers ========== //
 
 app.get('/qa/questions/:product_id/:page', function(req, res) {

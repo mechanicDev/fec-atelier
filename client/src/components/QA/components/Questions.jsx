@@ -17,6 +17,14 @@ class Questions extends React.Component {
     };
   }
 
+  componentWillReceiveProps({productName}) {
+    setTimeout(()=> {
+      this.setState({productName});
+    }, 100)
+    this.forceUpdate()
+  }
+
+
   handleQuestions(e) {
     e.preventDefault();
     this.props.getQAData();
