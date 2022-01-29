@@ -94,7 +94,9 @@ class RelatedItems extends React.Component {
               right: '25%',
               bottom: '20%',
               backgroundColor: 'White',
-              border: '2px solid grey'
+              border: '2px solid grey',
+              height: '600px',
+              width: '600px'
             }
           }}
             className={"ReactModal__Content"}

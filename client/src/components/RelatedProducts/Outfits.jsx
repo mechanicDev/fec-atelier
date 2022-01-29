@@ -8,39 +8,46 @@ class Outfits extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      outfit: []
+      outfit: [],
+      outfitDetails: [{item: 1}]
     };
   }
 
-  UNSAFE_componentWillReceiveProps({ outfit }) {
-    this.setState({ outfit });
+  UNSAFE_componentWillReceiveProp({ outfitDetails }) {
+    this.setState({ outfitDetails });
     setTimeout(() => {
-      console.log('The Outfit at the outfit ajax call', this.state.outfit)
-      $.ajax({
-        url: '/outfit',
-        method: 'GET',
-        data: { outfit: this.state.outfit },
-        success: response => {
-          console.log('This is the response: ', response)
-        }
-      })
-    }, 60)
+      console.log('This is the new state: ', this.state)
+      this.forceUpdate()
+    },20)
   }
 
   render() {
     if (!this.state.outfit.length) {
       return <div></div>
+    } else {
+      console.log('This should be working')
+      return (
+        <div key={Math.random()}>
+          <Carousel
+            show={3.5}
+            slide={3}
+            transition={0.5}
+          >
+            {this.state.outfitDetails.map(item => {
+              return (
+                <ProductCard
+                  key={Math.random()}
+                  type={'outfit'}
+                  item={item}
+                  handleXClick={this.handleXClick}
+                />
+              )
+            })}
+          </Carousel>
+        </div>
+      )
+
     }
-    let i = 0;
-    return (
-      <Carousel
-        show={3.5}
-        slide={3}
-        transition={0.5}
-        >
-          {}
-      </Carousel>
-    )
   }
 }
 

@@ -21,6 +21,7 @@ class App extends React.Component {
       item_id: Math.floor(Math.random() * (60563 - 59553 + 1)) + 59553,
       features: [],
       myOutfit: [],
+      outfitDetails: [],
       darkmode: false
     };
     this.changeProductOnCardClick = this.changeProductOnCardClick.bind(this);
@@ -40,6 +41,22 @@ class App extends React.Component {
       this.setState((state, props) => ({
         myOutfit: state.myOutfit.concat([sku])
       }))
+
+      setTimeout(() => {
+        console.log('Is this running??')
+        $.ajax({
+          url: '/outfit',
+          method: 'GET',
+          data: { outfit: this.state.myOutfit },
+          success: response => {
+            console.log('Response at mount: ', response)
+            if (typeof response === 'string') {
+              response = [];
+            }
+            this.setState({ outfitDetails: response })
+          }
+        });
+      },30)
   }
 
   darkModeToggle = (e) => {
@@ -55,7 +72,19 @@ class App extends React.Component {
       success: data => {
         this.setState({features: data.features})
       }
-    })
+    });
+    $.ajax({
+      url: '/outfit',
+      method: 'GET',
+      data: { outfit: this.state.myOutfit },
+      success: response => {
+        console.log('Response at mount: ', response)
+        if (typeof response === 'string') {
+          response = [];
+        }
+        this.setState({ outfitDetails: response })
+      }
+    });
   };
 
   render() {
@@ -76,27 +105,27 @@ class App extends React.Component {
               render={sendMetrics}/>
             }} />
           </div>
-          {/* <div>
+          <div className={'relatedProducts', 'carousel'}>
+            <h3>Related Products</h3>
+            <RelatedItems
+              itemId={this.state.item_id}
+              features={this.state.features}
+              changeProductOnCardClick={this.changeProductOnCardClick} />
+          </div>
+          <div className={'outfit', 'carousel'}>
+            <Outfits
+              itemId={this.state.item_id}
+              outfitDetails={this.state.outfitDetails}
+            />
+          </div>
+          <div>
             <ClickTracker render={sendMetrics => {
               return <QA itemid={this.state.item_id} render={sendMetrics} />
             }} />
-          </div> */}
-          {/* <div className="ratings">
+          </div>
+          <div className="ratings">
             <Ratings itemId={this.state.item_id} />
-          </div> */}
-        </div>
-        <div className={'relatedProducts', 'carousel'}>
-          <h3>Related Products</h3>
-          <RelatedItems
-            itemId={this.state.item_id}
-            features={this.state.features}
-            changeProductOnCardClick={this.changeProductOnCardClick} />
-        </div>
-        <div className={'outfit', 'carousel'}>
-          <Outfits
-            itemId={this.state.item_id}
-            outfit = {this.state.myOutfit}
-            />
+          </div>
         </div>
       </div>
     );

@@ -1,7 +1,7 @@
 .product_card {
   border: 1px solid black;
   padding: 2px;
-  margin: 2px
+  margin: 20px
 }
 
 .related_product {
@@ -12,4 +12,9 @@
 .related_product_image {
   height: 40%;
   width: auto
+}
+
+.actionButton {
+  display: inline-block;
+  position: relative;
 }

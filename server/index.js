@@ -82,8 +82,13 @@ app.get('/outfit', (req,res) => {
     rp.getSingleItemDetails(outfit)
       .then(results => {
         console.log('Results here: ', results)
+        rp.getRelatedImages(results)
+          .then(results => {
+            res.status(200).send(results);
+          })
+          .catch(e=>e);
       })
-      .catch(e => console.log("oops"))
+      .catch(e => e)
 
   }
 })
