@@ -9,6 +9,12 @@ let TableRow = props => {
     let checkMark = '<div></div>'
   } else if (!props.values[0] && props.values[1]) {
     let checkMark = '<div></div>'
+  } else {
+    let checkMark = <FontAwesomeIcon
+    className="checkMark"
+    icon={faCheck}
+  >
+  </FontAwesomeIcon>
   }
   return (
     <div>
