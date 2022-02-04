@@ -72,16 +72,12 @@ app.get('/relatedItems', (req, res) => {
 // ========== Outfit ========== //
 
 app.get('/outfit', (req,res) => {
-  console.log('This is the outfit at the server: ', req.query)
   if (!req.query.outfit) {
-    console.log('No outfit yet')
     res.end();
   } else {
     let outfit = req.query.outfit;
-    console.log('Outfit inside the else: ', outfit)
     rp.getSingleItemDetails(outfit)
       .then(results => {
-        console.log('Results here: ', results)
         rp.getRelatedImages(results)
           .then(results => {
             res.status(200).send(results);
