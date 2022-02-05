@@ -78,7 +78,7 @@ class App extends React.Component {
       method: 'GET',
       data: { outfit: this.state.myOutfit },
       success: response => {
-        console.log('Response at mount: ', response)
+        // console.log('Response at mount: ', response)
         if (typeof response === 'string') {
           response = [];
         }

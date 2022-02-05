@@ -14,6 +14,9 @@ module.exports = {
     minimize: true,
     minimizer: [new TerserPlugin()]
   },
+  config.node = {
+    fs: 'empty'
+  },
   module: {
     rules: [
       {
