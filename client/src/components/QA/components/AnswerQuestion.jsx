@@ -2,8 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import _ from 'underscore';
 import $ from 'jquery';
-import API_KEYS from '../../../../../env/config.js';
-console.log('API_KEYS: ', API_KEYS)
+import API_KEYS from '../../../../../env/filestack.js';
 
 // Modal.setAppElement('#app');
 

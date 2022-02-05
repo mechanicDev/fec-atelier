@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import StarRating from './StarRating.jsx';
 import InputProductBreakdowns from './InputProductBreakdowns.jsx';
-import API_KEYS from '../../../../../env/config.js';
+import API_KEYS from '../../../../../env/filestack.js';
 import axios from 'axios';
 import _ from 'underscore';
 
