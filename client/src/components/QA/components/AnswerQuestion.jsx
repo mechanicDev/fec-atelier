@@ -3,8 +3,7 @@ import Modal from 'react-modal';
 import _ from 'underscore';
 import $ from 'jquery';
 import API_KEYS from '../../../../../env/config.js';
-// require('dotenv').config();
-// const API_KEY = process.env.FILESTACK_API_KEY
+console.log('API_KEYS: ', API_KEYS)
 
 // Modal.setAppElement('#app');
 
