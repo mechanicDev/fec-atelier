@@ -4,6 +4,7 @@
   "description": "FEC Capstone Project",
   "main": "index.js",
   "scripts": {
+    "test1": "jest",
     "test": "jest --detectOpenHandles --coverage",
     "react-dev": "webpack --watch",
     "start": "npx nodemon server/index.js",
@@ -51,6 +52,7 @@
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@trendyol-js/react-carousel": "^2.0.1",
     "axios": "^0.24.0",
+    "babel-jest": "^27.5.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
